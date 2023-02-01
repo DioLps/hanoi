@@ -134,6 +134,7 @@ function setAmountDiscsToHasteInicial() {
 function playBonk() {
   const audio = document.createElement('audio')
   audio.src = './bonk.mp3'
+  audio.volume = 0.3
   audio.play()
 }
 

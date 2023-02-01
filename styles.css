@@ -24,6 +24,7 @@ header {
   justify-content: space-between;
   align-items: center;
   column-gap: 8px;
+  margin-bottom: 1rem;
 }
 .discs {
   padding: 4px 40px;
