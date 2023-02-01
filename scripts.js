@@ -165,7 +165,10 @@ function winGame() {
   playWin()
 }
 
-function resetGame() {
+function resetGame(showAlert) {
+  if (showAlert) {
+    alert("Noob :P")
+  }
   const domGame = document.querySelector('.game')
   domGame.classList.remove('game--hide')
   const domVictory = document.querySelector('.victory')

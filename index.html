@@ -25,19 +25,24 @@
           Tentativas
           <span id="tentatives"></span>
         </h2>
-        <select
-          class="discs"
-          name="discs"
-          id="discs"
-          onchange="selectDisc(event)"
-        >
-          <option value="3" selected>3 discos</option>
-          <option value="4">4 discos</option>
-          <option value="5">5 discos</option>
-          <option value="6">6 discos</option>
-          <option value="7">7 discos</option>
-          <option value="8">8 discos</option>
-        </select>
+        <div>
+          <button class="game__reiniciar" onclick="resetGame(true)">
+            Reinicar
+          </button>
+          <select
+            class="discs"
+            name="discs"
+            id="discs"
+            onchange="selectDisc(event)"
+          >
+            <option value="3" selected>3 discos</option>
+            <option value="4">4 discos</option>
+            <option value="5">5 discos</option>
+            <option value="6">6 discos</option>
+            <option value="7">7 discos</option>
+            <option value="8">8 discos</option>
+          </select>
+        </div>
       </header>
       <div class="board">
         <div
