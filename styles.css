@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Unbounded', cursive;
+}
+
+body {
+  margin: 8px 16px;
+}
+
+.game__title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.game__description {
+  text-align: justify;
+  margin-bottom: 2rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 8px;
+}
+.discs {
+  padding: 4px 40px;
+}
+.board {
+  display: flex;
+  justify-content: space-between;
+  min-height: 300px;
+}
+.haste {
+  flex: 0 0 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  border-bottom: 4px solid black;
+  min-height: 30px;
+  position: relative;
+}
+.haste::after {
+  content: ' ';
+  position: absolute;
+  width: 4px;
+  height: 100%;
+  background-color: black;
+}
+.item {
+  z-index: 10;
+  min-width: 30px;
+  width: 20px;
+  height: 30px;
+  background-color: black;
+}
+
+.game {
+  display: block;
+}
+
+.game--hide {
+  display: none;
+}
+
+.victory {
+  display: none;
+  text-align: center;
+}
+
+.victory--show {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.victory__title {
+  margin-bottom: 1rem;
+}
+.victory__reiniciar {
+  padding: 6px 12px;
+  border: none;
+  background-color: deepskyblue;
+  color: white;
+  font-weight: bolder;
+  cursor: pointer;
+}

@@ -7,278 +7,37 @@
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;800&display=swap"
       rel="stylesheet"
     />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Unbounded', cursive;
-      }
-
-      body {
-        margin: 8px 16px;
-      }
-      header {
-        display: flex;
-        align-items: center;
-        column-gap: 8px;
-      }
-      .board {
-        display: flex;
-        justify-content: space-between;
-        min-height: 300px;
-      }
-      .haste {
-        flex: 0 0 33%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-end;
-        border-bottom: 4px solid black;
-        min-height: 30px;
-        position: relative;
-      }
-      .haste::after {
-        content: ' ';
-        position: absolute;
-        width: 4px;
-        height: 100%;
-        background-color: black;
-      }
-      .item {
-        z-index: 10;
-        min-width: 30px;
-        width: 20px;
-        height: 30px;
-        background-color: black;
-      }
-
-      .game {
-        display: block;
-      }
-
-      .game--hide {
-        display: none;
-      }
-
-      .victory {
-        display: none;
-        text-align: center;
-      }
-
-      .victory--show {
-        display: flex;
-        flex-direction: column;
-        row-gap: 1rem;
-      }
-
-      .victory__title {
-        margin-bottom: 1rem;
-      }
-      .victory__reiniciar {
-        padding: 6px 12px;
-        border: none;
-        background-color: deepskyblue;
-        color: white;
-        font-weight: bolder;
-        cursor: pointer;
-      }
-    </style>
-    <script>
-      let state
-
-      function getState() {
-        return JSON?.parse(localStorage['state'])
-      }
-
-      function setState(state) {
-        localStorage['state'] = JSON?.stringify(state)
-      }
-
-      function initState() {
-        state = {
-          domHasteInicial: null,
-          domHasteAuxiliar: null,
-          domHasteFinal: null,
-          domTentatives: null,
-          sourceId: null,
-          hasteInicial: [0, 1, 2,3,4,5,6,7],
-          hasteAuxiliar: [],
-          hasteFinal: [],
-          tentatives: 0,
-        }
-        setState(state)
-      }
-
-      const colors = [
-        'blue',
-        'red',
-        'green',
-        'aqua',
-        'black',
-        'blueviolet',
-        'darkgreen',
-        'gold',
-      ]
-
-      function getColorByIndex(index) {
-        return colors[index]
-      }
-
-      function getWidthByIndex(index) {
-        return 20 * (index + 1) + 'px'
-      }
-
-      function createDomItem(item) {
-        const domItem = document.createElement('div')
-        domItem.classList.add('item')
-        domItem.id = item
-        domItem.draggable = true
-        domItem.ondragstart = drag
-        domItem.ondragover = false
-        domItem.style.backgroundColor = getColorByIndex(item)
-        domItem.style.width = getWidthByIndex(item)
-        return domItem
-      }
-
-      function getDomHastesRefs() {
-        state.domHasteInicial = document.querySelector('#hasteInicial')
-        state.domHasteAuxiliar = document.querySelector('#hasteAuxiliar')
-        state.domHasteFinal = document.querySelector('#hasteFinal')
-        state.domTentatives = document.querySelector('#tentatives')
-        setState(state)
-      }
-
-      function cleanHastes() {
-        state.domHasteInicial.innerHTML = ''
-        state.domHasteAuxiliar.innerHTML = ''
-        state.domHasteFinal.innerHTML = ''
-        setState(state)
-      }
-
-      function prepareDom() {
-        getDomHastesRefs()
-        cleanHastes()
-      }
-
-      function render(hastes, domHaste) {
-        hastes.forEach((item) => {
-          const domItem = createDomItem(item)
-          domHaste.appendChild(domItem)
-        })
-      }
-
-      function allowDrop(ev) {
-        ev.preventDefault()
-      }
-
-      function dragStart(ev) {
-        state.sourceId = ev.srcElement.parentElement.id
-        setState(state)
-      }
-
-      function drag(ev) {
-        ev.dataTransfer.setData('text', ev?.target?.id)
-      }
-
-      function drop(ev) {
-        state = getState()
-        const targetId = ev.target.id
-        const target = state[targetId]
-        const source = state[state.sourceId]
-        let data = ev.dataTransfer.getData('text')
-        if (
-          !ev ||
-          ev.target.classList.value == 'item' ||
-          data > target[target.length - 1]
-        )
-          return false
-        ev.preventDefault()
-        target.unshift(source.shift())
-        state[targetId] = target
-        state[state.sourceId] = source
-        state.tentatives += 1
-        setState(state)
-        draw()
-        playBonk()
-        checkWinCondition()
-      }
-
-      function playBonk() {
-        const audio = document.createElement('audio')
-        audio.src = './bonk.mp3'
-        audio.play()
-      }
-
-      function playWin() {
-        const audio = document.createElement('audio')
-        audio.src = './soufoda.mp3'
-        audio.play()
-      }
-
-      function checkWinCondition() {
-        const maxLength = 8
-        const { hasteFinal } = state
-        const allItemsInHasteFinalAreIncresing = hasteFinal.every(
-          (item, i) =>
-            item > hasteFinal[i + 1] || hasteFinal.length == maxLength,
-        )
-
-        if (
-          allItemsInHasteFinalAreIncresing &&
-          hasteFinal.length == maxLength
-        ) {
-          winGame()
-        }
-      }
-
-      function winGame() {
-        const domGame = document.querySelector('.game')
-        domGame.classList.add('game--hide')
-        const domVictory = document.querySelector('.victory')
-        domVictory.classList.add('victory--show')
-        playWin()
-      }
-
-      function resetGame() {
-        const domGame = document.querySelector('.game')
-        domGame.classList.remove('game--hide')
-        const domVictory = document.querySelector('.victory')
-        domVictory.classList.remove('victory--show')
-        init()
-      }
-
-      function draw() {
-        prepareDom()
-        const {
-          hasteInicial,
-          domHasteInicial,
-          hasteAuxiliar,
-          domHasteAuxiliar,
-          hasteFinal,
-          domHasteFinal,
-          domTentatives,
-          tentatives,
-        } = state
-        render(hasteInicial, domHasteInicial)
-        render(hasteAuxiliar, domHasteAuxiliar)
-        render(hasteFinal, domHasteFinal)
-        domTentatives.innerText = tentatives
-      }
-
-      function init() {
-        initState()
-        draw()
-      }
-    </script>
+    <link href="./styles.css" rel="stylesheet" />
+    <script src="./scripts.js"></script>
   </head>
   <body onload="init()">
     <div class="game">
+      <h1 class="game__title">
+        Torre de Hanói
+      </h1>
+      <p class="game__description">
+        Torre de Hanói é um quebra-cabeça que consiste em uma base contendo três
+        pinos, em um dos quais são dispostos alguns discos uns sobre os outros,
+        em ordem crescente de diâmetro, de cima para baixo.
+      </p>
       <header>
         <h2>
           Tentativas
           <span id="tentatives"></span>
         </h2>
+        <select
+          class="discs"
+          name="discs"
+          id="discs"
+          onchange="selectDisc(event)"
+        >
+          <option value="3" selected>3 discos</option>
+          <option value="4">4 discos</option>
+          <option value="5">5 discos</option>
+          <option value="6">6 discos</option>
+          <option value="7">7 discos</option>
+          <option value="8">8 discos</option>
+        </select>
       </header>
       <div class="board">
         <div
