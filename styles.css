@@ -23,6 +23,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   column-gap: 8px;
   margin-bottom: 1rem;
 }
@@ -97,3 +98,25 @@ header {
   font-weight: bolder;
   cursor: pointer;
 }
+.disclaimer-mobile {
+  font-size: 12px;
+}
+
+@media only screen and (max-width: 768px) {
+  .game__description {
+    font-size: 14px;
+  }
+  header > h2 {
+    font-size: 16px;
+    flex: 0 0 100%;
+    margin-bottom: 8px;
+  }
+  header > div {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .discs {
+    padding: 4px 18px;
+  }
+} 
