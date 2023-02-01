@@ -73,7 +73,6 @@ function cleanHastes() {
 function prepareDom() {
   getDomHastesRefs()
   cleanHastes()
-  setAmountDiscsToHasteInicial()
 }
 
 function render(hastes, domHaste) {
@@ -123,7 +122,7 @@ function selectDisc({ target }) {
   const selected = target.value * 1
   state.selectedDisc = selected
   setState(state)
-  draw()
+  onSelectedDrawContent()
 }
 
 function setAmountDiscsToHasteInicial() {
@@ -145,7 +144,8 @@ function playWin() {
 }
 
 function checkWinCondition() {
-  const maxLength = 8
+  const { selectedDisc } = state
+  const maxLength = [...Array(selectedDisc).keys()].length
   const { hasteFinal } = state
   const allItemsInHasteFinalAreIncresing = hasteFinal.every(
     (item, i) => item > hasteFinal[i + 1] || hasteFinal.length == maxLength,
@@ -172,6 +172,11 @@ function resetGame() {
   init()
 }
 
+function onSelectedDrawContent() {
+  setAmountDiscsToHasteInicial()
+  draw()
+}
+
 function draw() {
   prepareDom()
   const {
@@ -192,5 +197,6 @@ function draw() {
 
 function init() {
   initState()
+  setAmountDiscsToHasteInicial()
   draw()
 }
